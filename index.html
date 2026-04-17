@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DigiMad — Diagnóstico de Madurez Digital para microempresas B2B</title>
+<meta name="description" content="Herramienta de evaluación de madurez digital para microempresas B2B. Cuestionario de 24 preguntas, scoring por 6 dimensiones y roadmap personalizado de implementación.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <div class="brand">
+      <span class="logo-mark">DM</span>
+      <span class="brand-text">DigiMad</span>
+    </div>
+    <h1>Diagnóstico de Madurez Digital para microempresas B2B</h1>
+    <p class="subtitle">Evalúa tu nivel de madurez digital en 24 preguntas y recibe un roadmap personalizado de implementación priorizado por impacto y coste real.</p>
+    <div class="hero-meta">
+      <span>24 preguntas</span>
+      <span>·</span>
+      <span>6 dimensiones</span>
+      <span>·</span>
+      <span>~5 minutos</span>
+      <span>·</span>
+      <span>100% gratuito</span>
+    </div>
+    <button class="btn-primary" onclick="startAssessment()">Comenzar diagnóstico</button>
+    <p class="hero-note">Herramienta desarrollada como parte del Trabajo Fin de Grado de Alberto Rodríguez Usón (UCAM, 2026), basada en un caso real documentado de microempresa B2B del sector industrial en Latinoamérica.</p>
+  </div>
+</header>
+
+<!-- INTRO SECTION -->
+<section class="intro" id="intro">
+  <div class="container">
+    <h2>¿Qué evalúa esta herramienta?</h2>
+    <p class="intro-lead">Seis dimensiones críticas de la madurez digital de una microempresa B2B, identificadas a partir de un caso real con datos verificados de tres periodos consecutivos.</p>
+    <div class="dimensions-grid">
+      <div class="dim-card">
+        <span class="dim-icon">📦</span>
+        <h3>Catálogo digital</h3>
+        <p>Cobertura, calidad y escalabilidad del contenido de productos en tu canal online.</p>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon">🔍</span>
+        <h3>SEO y experiencia</h3>
+        <p>Visibilidad orgánica, navegación, conversión y elementos de confianza para el comprador.</p>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon">📊</span>
+        <h3>Datos integrados</h3>
+        <p>Consolidación de fuentes y capacidad de tomar decisiones con evidencia empírica.</p>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon">✉️</span>
+        <h3>Email marketing</h3>
+        <p>Automatización de comunicación con clientes a lo largo del ciclo de vida.</p>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon">💬</span>
+        <h3>Omnicanalidad</h3>
+        <p>Captación y atención en redes sociales, mensajería y canales preferidos del cliente.</p>
+      </div>
+      <div class="dim-card">
+        <span class="dim-icon">💰</span>
+        <h3>Eficiencia publicitaria</h3>
+        <p>Equilibrio entre medios pagados y propios; rentabilidad real de la inversión.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASSESSMENT FORM -->
+<section class="assessment hidden" id="assessment">
+  <div class="container">
+    <div class="progress-container">
+      <div class="progress-info">
+        <span id="currentDimension">Dimensión 1 de 6</span>
+        <span id="currentDimensionName">Catálogo digital</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-percent" id="progressPercent">0%</span>
+    </div>
+
+    <div id="questionContainer">
+      <!-- Questions will be injected here -->
+    </div>
+
+    <div class="navigation">
+      <button class="btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>← Anterior</button>
+      <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Siguiente →</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results hidden" id="results">
+  <div class="container">
+    <div class="results-header">
+      <h2>Tu diagnóstico de madurez digital</h2>
+      <p class="results-date" id="resultsDate"></p>
+    </div>
+
+    <div class="score-section">
+      <div class="score-card">
+        <div class="score-circle">
+          <svg width="160" height="160" viewBox="0 0 160 160">
+            <circle cx="80" cy="80" r="72" stroke="#e5e7eb" stroke-width="12" fill="none"/>
+            <circle id="scoreArc" cx="80" cy="80" r="72" stroke="#cc0000" stroke-width="12" fill="none"
+                    stroke-dasharray="452" stroke-dashoffset="452" stroke-linecap="round"
+                    transform="rotate(-90 80 80)"/>
+          </svg>
+          <div class="score-value">
+            <span id="globalScore">0</span><span class="score-suffix">/100</span>
+          </div>
+        </div>
+        <div class="score-info">
+          <h3 id="maturityLevel">—</h3>
+          <p id="maturityDescription">—</p>
+        </div>
+      </div>
+
+      <div class="radar-card">
+        <h3>Perfil por dimensión</h3>
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <div class="dimensions-detail">
+      <h3>Análisis por dimensión</h3>
+      <div id="dimensionsList"></div>
+    </div>
+
+    <div class="priorities">
+      <h3>Tus 3 prioridades de implementación</h3>
+      <p class="priorities-intro">Las áreas que más impacto tendrán sobre tu negocio según tu perfil actual:</p>
+      <div id="prioritiesList"></div>
+    </div>
+
+    <div class="roadmap">
+      <h3>Roadmap recomendado</h3>
+      <p class="roadmap-intro">Secuencia óptima de implementación basada en la dependencia lógica entre componentes (catálogo → SEO → datos → email → omnicanal → optimización publicitaria):</p>
+      <div id="roadmapTimeline"></div>
+    </div>
+
+    <div class="stack-recommended">
+      <h3>Stack tecnológico recomendado</h3>
+      <p class="stack-intro">Herramientas mínimas viables con sus costes mensuales reales (datos verificados en abril de 2026):</p>
+      <table class="stack-table">
+        <thead>
+          <tr>
+            <th>Herramienta</th>
+            <th>Función</th>
+            <th>Plan</th>
+            <th>Coste mensual (USD)</th>
+          </tr>
+        </thead>
+        <tbody id="stackTableBody"></tbody>
+      </table>
+      <p class="stack-total" id="stackTotal"></p>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="downloadReport()">📄 Descargar informe (PDF)</button>
+      <button class="btn-secondary" onclick="restartAssessment()">🔄 Hacer otro diagnóstico</button>
+      <button class="btn-secondary" onclick="shareResults()">🔗 Copiar enlace al diagnóstico</button>
+    </div>
+
+    <div class="references-block">
+      <h4>Acerca de esta herramienta</h4>
+      <p>DigiMad ha sido desarrollada como parte del Trabajo Fin de Grado <em>"Implementación de inteligencia artificial y automatización de marketing en el e-commerce de una microempresa B2B"</em> de Alberto Rodríguez Usón (Universidad Católica San Antonio de Murcia, 2026), bajo la dirección del Dr. Juan Bonastre Egea. Los criterios de evaluación, los pesos de cada dimensión y el stack tecnológico recomendado se basan en evidencia empírica documentada en el caso real de Empresa A, con datos verificados de los periodos 2024, 2025 y primer trimestre de 2026.</p>
+      <p>La herramienta se ofrece de forma gratuita y abierta. Su código fuente está disponible públicamente. Las recomendaciones generadas son orientativas y deben adaptarse al contexto particular de cada microempresa.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>DigiMad · Trabajo Fin de Grado UCAM 2026 · Alberto Rodríguez Usón</p>
+    <p class="footer-small">Tutor: Dr. Juan Bonastre Egea · Facultad de Economía y Empresa</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
